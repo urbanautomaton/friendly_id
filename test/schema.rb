@@ -1,4 +1,5 @@
 require "friendly_id/migration"
+require "friendly_id/compatible_slugs_migration"
 require "globalize3"
 
 class TranslatedArticle < ActiveRecord::Base
@@ -11,6 +12,7 @@ module FriendlyId
       class << self
         def down
           CreateFriendlyIdSlugs.down
+          CreateSlugs.down
           tables.each do |name|
             drop_table name
           end
@@ -21,6 +23,7 @@ module FriendlyId
           # TODO: use schema version to avoid ugly hacks like this
           return if @done
           CreateFriendlyIdSlugs.up
+          CreateSlugs.up
 
           tables.each do |table_name|
             create_table table_name do |t|
