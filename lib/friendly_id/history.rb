@@ -122,7 +122,6 @@ method.
       def direct_conflicts
         scope = Slug.where("slug = ?", normalized)
         scope = scope.where(:sluggable_type => sluggable_class.to_s)
-        scope = scope.where("sluggable_id <> ?", sluggable_primary_key) unless sluggable.new_record?
         scope_excluding_sluggable(scope)
       end
 
