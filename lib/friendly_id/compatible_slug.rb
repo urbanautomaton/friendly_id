@@ -15,6 +15,12 @@ module FriendlyId
       sequence == 1 ? name : "#{name}#{separator}#{sequence}"
     end
 
+    def slug=(new_slug)
+      name, sequence = new_slug.split(separator)
+      sequence ||= 1
+      self.name, self.sequence = name, sequence.to_i
+    end
+
     private
 
     def separator

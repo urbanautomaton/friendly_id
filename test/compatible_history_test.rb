@@ -2,10 +2,10 @@ require "helper"
 
 class Manual < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :history
+  friendly_id :name, :use => :compatible_history
 end
 
-class HistoryTest < MiniTest::Unit::TestCase
+class CompatibleHistoryTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
@@ -134,10 +134,10 @@ class HistoryTest < MiniTest::Unit::TestCase
 
 end
 
-class HistoryTestWithSti < HistoryTest
+class CompatibleHistoryTestWithSti < CompatibleHistoryTest
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :name, :use => [:slugged, :history]
+    friendly_id :name, :use => [:slugged, :compatible_history]
   end
 
   class Editorialist < Journalist

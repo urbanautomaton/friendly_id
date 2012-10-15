@@ -49,13 +49,15 @@ module FriendlyId
 
   @mutex = Mutex.new
 
-  autoload :History,    "friendly_id/history"
-  autoload :Slug,       "friendly_id/slug"
-  autoload :SimpleI18n, "friendly_id/simple_i18n"
-  autoload :Reserved,   "friendly_id/reserved"
-  autoload :Scoped,     "friendly_id/scoped"
-  autoload :Slugged,    "friendly_id/slugged"
-  autoload :Globalize,  "friendly_id/globalize"
+  autoload :History,           "friendly_id/history"
+  autoload :CompatibleHistory, "friendly_id/compatible_history"
+  autoload :Slug,              "friendly_id/slug"
+  autoload :CompatibleSlug,    "friendly_id/compatible_slug"
+  autoload :SimpleI18n,        "friendly_id/simple_i18n"
+  autoload :Reserved,          "friendly_id/reserved"
+  autoload :Scoped,            "friendly_id/scoped"
+  autoload :Slugged,           "friendly_id/slugged"
+  autoload :Globalize,         "friendly_id/globalize"
 
   # FriendlyId takes advantage of `extended` to do basic model setup, primarily
   # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id
