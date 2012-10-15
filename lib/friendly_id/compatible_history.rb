@@ -76,7 +76,7 @@ method.
         raise "FriendlyId::CompatibleHistory is incompatible with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy,
-          :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
+          :class_name => CompatibleSlug.to_s, :order => "#{CompatibleSlug.quoted_table_name}.id DESC"
         after_save :create_slug
         relation_class.send :include, FinderMethods
         friendly_id_config.slug_generator_class.send :include, SlugGenerator
@@ -124,7 +124,7 @@ method.
         sequence ||= 1
         scope = CompatibleSlug.where(:sluggable_type => @klass.base_class.to_s, :name => name)
         scope = scope.where(:sequence => sequence.to_i)
-        sluggable_id = scope.select(:sluggable_id).map(&:id).first
+        sluggable_id = scope.select(:sluggable_id).map(&:sluggable_id).first
         yield sluggable_id if sluggable_id
       end
     end
