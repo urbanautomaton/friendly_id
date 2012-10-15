@@ -87,9 +87,9 @@ method.
 
     def create_slug
       return unless friendly_id
-      return if slugs.first && slugs.first.name == friendly_id
+      return if slugs.first && slugs.first.slug == friendly_id
       # Allow reversion back to a previously used slug
-      relation = slugs.where(:name => friendly_id)
+      relation = slugs.with_slug(friendly_id, self.class.friendly_id_config.sequence_separator)
       result = relation.select("id").lock(true).all
       relation.delete_all unless result.empty?
       slugs.create! do |record|
