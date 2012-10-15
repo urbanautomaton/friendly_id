@@ -1,14 +1,14 @@
 require "helper"
 
-class Manual < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :name, :use => :compatible_history
-end
-
 class CompatibleHistoryTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
+
+  class Manual < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :compatible_history
+  end
 
   def model_class
     Manual
