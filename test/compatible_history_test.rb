@@ -10,6 +10,16 @@ class CompatibleHistoryTest < MiniTest::Unit::TestCase
     friendly_id :name, :use => :compatible_history
   end
 
+  class ChangeableManual < ActiveRecord::Base
+    self.table_name = "manuals"
+    extend FriendlyId
+    friendly_id :name, :use => :compatible_history
+
+    def should_generate_new_friendly_id?
+      true
+    end
+  end
+
   def model_class
     Manual
   end
@@ -129,6 +139,16 @@ class CompatibleHistoryTest < MiniTest::Unit::TestCase
       assert second_record.slug == "foo--2"
       first_record.update_attributes :name => 'another'
       assert first_record.slug == "another--2"
+    end
+  end
+
+  test "should allow regeneration of existing slugs without adding sequences" do
+    transaction do
+      first_record = ChangeableManual.create! :name => "foo"
+      second_record = ChangeableManual.create! :name => "foo"
+      first_record.slug = nil
+      first_record.save
+      assert first_record.slug == "foo"
     end
   end
 
