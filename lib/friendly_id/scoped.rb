@@ -86,7 +86,8 @@ an example of one way to set this up:
     # feature.
     def self.included(model_class)
       model_class.instance_eval do
-        raise "FriendlyId::Scoped is incompatibe with FriendlyId::History" if self < History
+        raise "FriendlyId::Scoped is incompatible with FriendlyId::History" if self < History
+        raise "FriendlyId::Scoped is incompatible with FriendlyId::CompatibleHistory" if self < CompatibleHistory
         include Slugged unless self < Slugged
         friendly_id_config.class.send :include, Configuration
         friendly_id_config.slug_generator_class.send :include, SlugGenerator
@@ -130,20 +131,28 @@ an example of one way to set this up:
       end
     end
 
-    # This module overrides {FriendlyId::SlugGenerator#conflict} to consider
-    # scope, to avoid adding sequences to slugs under different scopes.
+    # This module overrides {FriendlyId::SlugGenerator#conflict} and
+    # {FriendlyId::SlugGenerator#direct_conflict} to consider scope, to avoid
+    # adding sequences to slugs under different scopes.
     module SlugGenerator
 
       private
 
-      def conflict
-        columns = friendly_id_config.scope_columns
-        matched = columns.inject(conflicts) do |memo, column|
-           memo.where(column => sluggable.send(column))
-        end
-
-        matched.first
+      def direct_conflict
+        @direct_conflict ||= scope_with_scoped_conditions(direct_conflicts).first
       end
+
+      def conflict
+        @conflict ||= scope_with_scoped_conditions(conflicts).first
+      end
+
+      def scope_with_scoped_conditions(scope)
+        columns = friendly_id_config.scope_columns
+        columns.inject(scope) do |memo, column|
+          memo.where(column => sluggable.send(column))
+        end
+      end
+
     end
   end
 end

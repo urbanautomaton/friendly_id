@@ -120,10 +120,8 @@ method.
 
       # Accepts a slug, and yields a corresponding sluggable_id into the block.
       def with_old_friendly_id(slug, &block)
-        name, sequence = slug.split(@klass.base_class.friendly_id_config.sequence_separator)
-        sequence ||= 1
-        scope = CompatibleSlug.where(:sluggable_type => @klass.base_class.to_s, :name => name)
-        scope = scope.where(:sequence => sequence.to_i)
+        scope = CompatibleSlug.where(:sluggable_type => @klass.base_class.to_s)
+        scope = scope.with_slug(slug, @klass.friendly_id_config.sequence_separator)
         sluggable_id = scope.select(:sluggable_id).map(&:sluggable_id).first
         yield sluggable_id if sluggable_id
       end
