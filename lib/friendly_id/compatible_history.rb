@@ -37,7 +37,9 @@ created with a migration similar to:
 
 === Considerations
 
-This module is incompatible with the +:scoped+ module.
+This module is incompatible with the +:scoped+ module. If your existing
+slugs rely on the scope column in the slugs table, the wrong records are
+likely to be returned.
 
 Because recording slug history requires creating additional database records,
 this module has an impact on the performance of the associated model's +create+
